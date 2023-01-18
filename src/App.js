@@ -47,7 +47,7 @@ function App() {
       .sort(() => Math.random() - 0.5) // sort function takes two arguments, if Math.random() - 0.5 is less than 0 then cards remain in same order or else the order is changed
       .map((card) => ({ ...card, id: Math.random() })); // map returns a an object which contains image source and id, id is made using Math.random()
     setMinimalTurn((prevBest) => {
-      if (prevBest != 0) {
+      if (prevBest !== 0) {
         if (prevBest > turn) {
           return turn;
         } else {
