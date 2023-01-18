@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useState, useEffect} from "react";
 import "./App.css";
 import SingleCard from "./Components/SingleCard";
 
@@ -40,23 +40,11 @@ function App() {
   const [choiceOne, setChoiceOne] = useState(null);
   const [choiceTwo, setChoiceTwo] = useState(null);
   const [disable, setDisable] = useState(false);
-  const [minimalTurn, setMinimalTurn] = useState(0);
 
   const shuffleCards = () => {
     const shuffled_cards_array = [...cardImages, ...cardImages]
       .sort(() => Math.random() - 0.5) // sort function takes two arguments, if Math.random() - 0.5 is less than 0 then cards remain in same order or else the order is changed
       .map((card) => ({ ...card, id: Math.random() })); // map returns a an object which contains image source and id, id is made using Math.random()
-    setMinimalTurn((prevBest) => {
-      if (prevBest != 0) {
-        if (prevBest > turn) {
-          return turn;
-        } else {
-          return prevBest;
-        }
-      } else {
-        return turn;
-      }
-    });
     setCards(shuffled_cards_array);
     setTurn(0);
   };
@@ -112,7 +100,6 @@ function App() {
     <div className="App">
       <h1>Magic Cards</h1>
       <div>
-        <p>Best : {minimalTurn}</p>
         <p>Number of turns: {turn}</p>
       </div>
 
