@@ -39,8 +39,32 @@ function App() {
   const [choiceOne, setChoiceOne] = useState(null);
   const [choiceTwo, setChoiceTwo] = useState(null);
   const [disable, setDisable] = useState(false);
+  const [minTurnTillNow,setMinTurnTillNow] = useState(0);
 
   const shuffleCards = () => {
+
+    let allCardsMatched = true;
+
+    // to get new minimum score all cards should be played that is every card should be matched
+    for(let i = 0; i<cards.length; i++){
+      if(cards[i].matched === false){
+        allCardsMatched=false;
+        break;
+      }
+    }
+
+    // setting the least turn upto now in game
+    if(allCardsMatched){
+      if(minTurnTillNow !== 0){
+        if(minTurnTillNow > turn){
+          setMinTurnTillNow(turn);
+        }        
+      }
+      else{
+        setMinTurnTillNow(turn)
+      }
+    }
+
     const shuffled_cards_array = [...cardImages, ...cardImages]
       .sort(() => Math.random() - 0.5) // sort function takes two arguments, if Math.random() - 0.5 is less than 0 then cards remain in same order or else the order is changed
       .map((card) => ({ ...card, id: Math.random() })); // map returns a an object which contains image source and id, id is made using Math.random()
@@ -92,7 +116,10 @@ function App() {
   // Starting Game automatically
   // lol we can add two useEffect in single component
   useEffect(() => {
-    shuffleCards();
+    const shuffled_cards_array = [...cardImages, ...cardImages]
+      .sort(() => Math.random() - 0.5) // sort function takes two arguments, if Math.random() - 0.5 is less than 0 then cards remain in same order or else the order is changed
+      .map((card) => ({ ...card, id: Math.random() })); // map returns a an object which contains image source and id, id is made using Math.random()
+    setCards(shuffled_cards_array);
   }, []);
 
   return (
@@ -100,6 +127,7 @@ function App() {
       <h1>Magic Cards</h1>
 
       <div>
+        <p>Minimum number of turn : {minTurnTillNow}</p>
         <p>Number of turns: {turn}</p>
       </div>
 
