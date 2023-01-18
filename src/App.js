@@ -1,4 +1,4 @@
-import {  useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import SingleCard from "./Components/SingleCard";
 
@@ -40,33 +40,8 @@ function App() {
   const [choiceOne, setChoiceOne] = useState(null);
   const [choiceTwo, setChoiceTwo] = useState(null);
   const [disable, setDisable] = useState(false);
-  const [minTurnTillNow,setMinTurnTillNow] = useState(0);
 
   const shuffleCards = () => {
-
-    let allCardsPlayed;
-
-    for(let i = 0; i<cards.length; i++){
-      if(cards[i].matched === true){
-        allCardsPlayed = true;
-      }
-      else{
-        allCardsPlayed = false;
-        break;
-      }
-    }
-
-    if(allCardsPlayed === true){
-      if(minTurnTillNow !== 0){
-        if(minTurnTillNow > turn){
-          setMinTurnTillNow(turn)
-        }
-      }
-      else{
-        setMinTurnTillNow(turn);
-      }
-    }
-    
     const shuffled_cards_array = [...cardImages, ...cardImages]
       .sort(() => Math.random() - 0.5) // sort function takes two arguments, if Math.random() - 0.5 is less than 0 then cards remain in same order or else the order is changed
       .map((card) => ({ ...card, id: Math.random() })); // map returns a an object which contains image source and id, id is made using Math.random()
@@ -119,14 +94,13 @@ function App() {
   // lol we can add two useEffect in single component
   useEffect(() => {
     shuffleCards();
-  }, [minTurnTillNow]);
+  }, []);
 
   return (
     <div className="App">
       <h1>Magic Cards</h1>
-      
+
       <div>
-      <p>Minimum number of turns : {minTurnTillNow}</p>
         <p>Number of turns: {turn}</p>
       </div>
 
