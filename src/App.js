@@ -42,7 +42,7 @@ function App() {
   const [disable, setDisable] = useState(false);
   const [minimalTurn, setMinimalTurn] = useState(0);
 
-  const shuffleCards = useCallback(() => {
+  const shuffleCards = () => {
     const shuffled_cards_array = [...cardImages, ...cardImages]
       .sort(() => Math.random() - 0.5) // sort function takes two arguments, if Math.random() - 0.5 is less than 0 then cards remain in same order or else the order is changed
       .map((card) => ({ ...card, id: Math.random() })); // map returns a an object which contains image source and id, id is made using Math.random()
@@ -59,7 +59,7 @@ function App() {
     });
     setCards(shuffled_cards_array);
     setTurn(0);
-  },[minimalTurn,setTurn]);
+  };
 
   const handleChoice = (card) => {
     choiceOne ? setChoiceTwo(card) : setChoiceOne(card);
