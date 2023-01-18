@@ -1,16 +1,16 @@
-import { Children, useEffect, useState, useCallback } from 'react';
-import './App.css';
-import SingleCard from './Components/SingleCard';
+import { Children, useEffect, useState, useCallback } from "react";
+import "./App.css";
+import SingleCard from "./Components/SingleCard";
 
 const cardImages = [
   // added matched property
-  {"src":"/img/helmet-1.png",matched:false},
-  {"src":"/img/potion-1.png",matched:false},
-  {"src":"/img/ring-1.png",matched:false},
-  {"src":"/img/scroll-1.png",matched:false},
-  {"src":"/img/shield-1.png",matched:false},
-  {"src":"/img/sword-1.png",matched:false}
-]
+  { src: "/img/helmet-1.png", matched: false },
+  { src: "/img/potion-1.png", matched: false },
+  { src: "/img/ring-1.png", matched: false },
+  { src: "/img/scroll-1.png", matched: false },
+  { src: "/img/shield-1.png", matched: false },
+  { src: "/img/sword-1.png", matched: false },
+];
 
 /*
 let l = cardImages.length;
@@ -34,114 +34,101 @@ cardImages.forEach((el) => {
 console.log(arr2); 
 */
 
-
 function App() {
-
-  const [cards,setCards] = useState([]);
-  const [turn,setTurn] = useState(0);
-  const [choiceOne,setChoiceOne] = useState(null);
-  const [choiceTwo,setChoiceTwo] = useState(null);
-  const [disable,setDisable] = useState(false);
-  const [minimalTurn,setMinimalTurn] = useState(0);
-
+  const [cards, setCards] = useState([]);
+  const [turn, setTurn] = useState(0);
+  const [choiceOne, setChoiceOne] = useState(null);
+  const [choiceTwo, setChoiceTwo] = useState(null);
+  const [disable, setDisable] = useState(false);
+  const [minimalTurn, setMinimalTurn] = useState(0);
 
   const shuffleCards = () => {
-    const shuffled_cards_array = [...cardImages,...cardImages]
-    .sort(() => Math.random() - 0.5) // sort function takes two arguments, if Math.random() - 0.5 is less than 0 then cards remain in same order or else the order is changed
-    .map((card) => ({...card,id:Math.random()}) ) // map returns a an object which contains image source and id, id is made using Math.random()
-    setMinimalTurn(prevBest => {
-      if(prevBest != 0 ){
-        if(prevBest > turn ){
+    const shuffled_cards_array = [...cardImages, ...cardImages]
+      .sort(() => Math.random() - 0.5) // sort function takes two arguments, if Math.random() - 0.5 is less than 0 then cards remain in same order or else the order is changed
+      .map((card) => ({ ...card, id: Math.random() })); // map returns a an object which contains image source and id, id is made using Math.random()
+    setMinimalTurn((prevBest) => {
+      if (prevBest != 0) {
+        if (prevBest > turn) {
           return turn;
+        } else {
+          return prevBest;
         }
-        else{
-          return prevBest
-        }
-      }
-      else{
+      } else {
         return turn;
       }
-    })
+    });
     setCards(shuffled_cards_array);
     setTurn(0);
-  }
+  };
 
-
-  const handleChoice  = (card) => {
+  const handleChoice = (card) => {
     choiceOne ? setChoiceTwo(card) : setChoiceOne(card);
-  }
+  };
 
-  const resetChoices = () =>{
+  const resetChoices = () => {
     setChoiceOne(null);
     setChoiceTwo(null);
-    setTurn(prevTurn => prevTurn + 1);
-    setDisable(false)
-  }
+    setTurn((prevTurn) => prevTurn + 1);
+    setDisable(false);
+  };
 
-  useEffect(()=>{
-
+  useEffect(() => {
     // if both cards are not null then check for equivalency
-    if(choiceOne && choiceTwo){
-      setDisable(true)
-      if(choiceOne.src === choiceTwo.src){
-        
+    if (choiceOne && choiceTwo) {
+      setDisable(true);
+      if (choiceOne.src === choiceTwo.src) {
         // when both card are same change matched property to true
-        setCards(previousCards => {
-          return previousCards.map(previousCard => {
-            if(previousCard.src === choiceOne.src){
-              return {...previousCard,matched:true}
+        setCards((previousCards) => {
+          return previousCards.map((previousCard) => {
+            if (previousCard.src === choiceOne.src) {
+              return { ...previousCard, matched: true };
+            } else {
+              return previousCard;
             }
-            else{
-              return previousCard
-            }
-          })
-        })
+          });
+        });
 
         // console.log("Cards Match");
-      }
-      else{
+      } else {
         // console.log("Cards do not match");
       }
 
       // after checking equivalency reset them
-      setTimeout(()=>{
+      setTimeout(() => {
         resetChoices();
-      },500)
-          }
-  },[choiceOne,choiceTwo])
+      }, 500);
+    }
+  }, [choiceOne, choiceTwo]);
 
   // console.log(cards);
 
   // Starting Game automatically
   // lol we can add two useEffect in single component
-  useEffect(()=>{
+  useEffect(() => {
     shuffleCards();
-  },[])
+  }, []);
 
   return (
     <div className="App">
-        <h1>Magic Cards</h1>
-        <div>
+      <h1>Magic Cards</h1>
+      <div>
         <p>Best : {minimalTurn}</p>
         <p>Number of turns: {turn}</p>
       </div>
-        
-        <div className='card-grid'>
-        {
-          cards.map(card => (
-            <SingleCard
-            handleChoice = {handleChoice} 
-            key={card.id} 
+
+      <div className="card-grid">
+        {cards.map((card) => (
+          <SingleCard
+            handleChoice={handleChoice}
+            key={card.id}
             card={card}
-            flipped = { card === choiceOne || card === choiceTwo || card.matched }
-            disable={disable} 
-            />
-          ))
-        }
-        </div>
+            flipped={card === choiceOne || card === choiceTwo || card.matched}
+            disable={disable}
+          />
+        ))}
+      </div>
 
-        <button onClick={shuffleCards}>New Game</button>
-
+      <button onClick={shuffleCards}>New Game</button>
     </div>
   );
 }
