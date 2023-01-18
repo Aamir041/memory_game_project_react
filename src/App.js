@@ -119,7 +119,7 @@ function App() {
   // lol we can add two useEffect in single component
   useEffect(() => {
     shuffleCards();
-  }, []);
+  }, [minTurnTillNow]);
 
   return (
     <div className="App">
