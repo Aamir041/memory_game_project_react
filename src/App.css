@@ -2,6 +2,7 @@
   max-width: 860px;
   margin: 40px auto;
 }
+
 button {
   background: none;
   border: 2px solid #fff;
@@ -13,12 +14,13 @@ button {
   font-size: 1em;
   margin-top: 1rem;
 }
+
 button:hover {
   background: #c23866;
   color: #fff;
 }
 
-.card-grid{
+.card-grid {
   margin-top: 40px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
