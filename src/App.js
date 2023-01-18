@@ -1,4 +1,4 @@
-import {  useState, useEffect, useRef } from "react";
+import {  useState, useEffect } from "react";
 import "./App.css";
 import SingleCard from "./Components/SingleCard";
 
@@ -40,7 +40,7 @@ function App() {
   const [choiceOne, setChoiceOne] = useState(null);
   const [choiceTwo, setChoiceTwo] = useState(null);
   const [disable, setDisable] = useState(false);
-  const minTurnTillNow = useRef(0);
+  const [minTurnTillNow,setMinTurnTillNow] = useState(0);
 
   const shuffleCards = () => {
 
@@ -57,13 +57,13 @@ function App() {
     }
 
     if(allCardsPlayed === true){
-      if(minTurnTillNow.current !== 0){
-        if(minTurnTillNow.current > turn){
-          minTurnTillNow.current = turn;
+      if(minTurnTillNow !== 0){
+        if(minTurnTillNow > turn){
+          setMinTurnTillNow(turn)
         }
       }
       else{
-        minTurnTillNow.current = turn;
+        setMinTurnTillNow(turn);
       }
     }
     
@@ -126,7 +126,7 @@ function App() {
       <h1>Magic Cards</h1>
       
       <div>
-      <p>Minimum number of turns : {minTurnTillNow.current}</p>
+      <p>Minimum number of turns : {minTurnTillNow}</p>
         <p>Number of turns: {turn}</p>
       </div>
 
