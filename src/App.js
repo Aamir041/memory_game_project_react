@@ -3,12 +3,13 @@ import './App.css';
 import SingleCard from './Components/SingleCard';
 
 const cardImages = [
-  {"src":"/img/helmet-1.png"},
-  {"src":"/img/potion-1.png"},
-  {"src":"/img/ring-1.png"},
-  {"src":"/img/scroll-1.png"},
-  {"src":"/img/shield-1.png"},
-  {"src":"/img/sword-1.png"}
+  // added matched property
+  {"src":"/img/helmet-1.png",matched:false},
+  {"src":"/img/potion-1.png",matched:false},
+  {"src":"/img/ring-1.png",matched:false},
+  {"src":"/img/scroll-1.png",matched:false},
+  {"src":"/img/shield-1.png",matched:false},
+  {"src":"/img/sword-1.png",matched:false}
 ]
 
 /*
@@ -40,6 +41,7 @@ function App() {
   const [turn,setTurn] = useState(0);
   const [choiceOne,setChoiceOne] = useState(null);
   const [choiceTwo,setChoiceTwo] = useState(null);
+  const [disable,setDisable] = useState(false);
 
 
   const shuffleCards = () => {
@@ -60,21 +62,48 @@ function App() {
     setChoiceOne(null);
     setChoiceTwo(null);
     setTurn(prevTurn => prevTurn + 1);
+    setDisable(false)
   }
 
   useEffect(()=>{
+
+    // if both cards are not null then check for equivalency
     if(choiceOne && choiceTwo){
+      setDisable(true)
       if(choiceOne.src === choiceTwo.src){
-        console.log("Cards Match");
+        
+        // when both card are same change matched property to true
+        setCards(previousCards => {
+          return previousCards.map(previousCard => {
+            if(previousCard.src === choiceOne.src){
+              return {...previousCard,matched:true}
+            }
+            else{
+              return previousCard
+            }
+          })
+        })
+
+        // console.log("Cards Match");
       }
       else{
-        console.log("Cards do not match");
+        // console.log("Cards do not match");
       }
-      resetChoices();
-    }
+
+      // after checking equivalency reset them
+      setTimeout(()=>{
+        resetChoices();
+      },500)
+          }
   },[choiceOne,choiceTwo])
 
   // console.log(cards);
+
+  // Starting Game automatically
+  // lol we can add two useEffect in single component
+  useEffect(()=>{
+    shuffleCards();
+  },[])
 
   return (
     <div className="App">
@@ -87,10 +116,15 @@ function App() {
             <SingleCard
             handleChoice = {handleChoice} 
             key={card.id} 
-            card={card} />
+            card={card}
+            flipped = { card === choiceOne || card === choiceTwo || card.matched }
+            disable={disable} 
+            />
           ))
         }
         </div>
+
+        <div>Number of turns: {turn}</div>
 
     </div>
   );
